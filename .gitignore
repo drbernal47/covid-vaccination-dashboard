@@ -1,3 +1,6 @@
+# API Key ignore
+config.js
+
 # MacOS-related
 .DS_Store
 
