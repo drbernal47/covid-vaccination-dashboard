@@ -5,8 +5,8 @@ console.log('stateData.js');
 function getActuals() {
     var url = `https://api.covidactnow.org/v2/states.timeseries.json?apiKey=${api_key}`;
 
-    d3.json(url).then(function(response) {
-        console.log(response);
+    return d3.json(url).then(function(response) {
+        // console.log(response);
 
         var states = [];
         for (i=0; i < response.length; i++) {
@@ -16,19 +16,22 @@ function getActuals() {
             if (stateID != 'MP') {
                 if (stateID != 'PR') {
                     var stateActuals = stateData.actualsTimeseries;
-                    console.log(stateActuals);
+                    
+                    var dict = {};
+                    dict[stateID] = stateActuals;
+                    states.push(dict);
                 }
             }
-            var dict = {};
-            dict[stateID] = stateActuals;
-            states.push(dict);
-        // Want to return a dictionary with keys as the state ID and the stateActuals as the value
-        console.log(states);
+
         }
+        // Want to return a dictionary with keys as the state ID and the stateActuals as the value
+        return states;
+
     });
 }
 
-getActuals();
+var test = getActuals();
+console.log(test);
 
 
 
