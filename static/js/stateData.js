@@ -53,18 +53,34 @@ L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 }).addTo(myMap);
 
 // Load in geojson data
-var geoData = "static/data/gz_2010_us_040_00_500k.json";
+var geoData = "static/data/gz_2010_us_040_00_20m.json";
 
 var geojson;
 
+// For loop that goes into each part of the var geoData:
+// Add to the properties dictionary the vaccine value that we want (vaccinationsCompletedRatio)
+
+
 // Grab data with d3
 d3.json(geoData).then(function(data) {
+
+
+    // Remove geojson for Puerto Rico
+
+    // Add the property: vaccinationsCompletedData
+    console.log(data);
+
+    for (i=0; i < 52; i++) {
+        data.features[i].properties['vaccineNumber'] = 42;
+        console.log(data.features[i].properties);
+    }
+
 
     // Create a new choropleth layer
     geojson = L.choropleth(data, {
   
       // Define what  property in the features to use
-      valueProperty: "CENSUSAREA",
+      valueProperty: "STATE",
   
       // Set color scale
       scale: ["#ffffb2", "#b10026"],
