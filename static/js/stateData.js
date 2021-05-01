@@ -6,9 +6,9 @@ function getActuals() {
     var url = `https://api.covidactnow.org/v2/states.timeseries.json?apiKey=${json_api_key}`;
 
     return d3.json(url).then(function(response) {
-        // console.log(response);
+        console.log(response);
 
-        var states = [];
+        var states = {};
         for (i=0; i < response.length; i++) {
             var stateData = response[i];
             var stateID = stateData.state;
@@ -17,9 +17,7 @@ function getActuals() {
                 if (stateID != 'PR') {
                     var stateActuals = stateData.actualsTimeseries;
                     
-                    var dict = {};
-                    dict[stateID] = stateActuals;
-                    states.push(dict);
+                    states[stateID] = stateActuals;
                 }
             }
 
@@ -30,8 +28,7 @@ function getActuals() {
     });
 }
 
-var actuals = getActuals();
-console.log(actuals);
+
 
 
 
@@ -39,7 +36,7 @@ console.log(actuals);
 // Creating map object
 var myMap = L.map("map", {
     center: [39.8283, -98.5795],
-    zoom: 4.1
+    zoom: 4
   });
 
 // Adding tile layer
@@ -64,6 +61,10 @@ var geojson;
 // Grab data with d3
 d3.json(geoData).then(function(data) {
 
+    var actuals = getActuals();
+    console.log(actuals);
+
+    console.log(Object.keys(actuals))
 
     // Remove geojson for Puerto Rico
 
@@ -71,8 +72,20 @@ d3.json(geoData).then(function(data) {
     console.log(data);
 
     for (i=0; i < 52; i++) {
-        data.features[i].properties['vaccineNumber'] = 42;
-        console.log(data.features[i].properties);
+        // Find the properties section of each state
+        var stateProperties = data.features[i].properties;
+
+        // Get the state name and convert to state ID
+        var stateID = toStateID(stateProperties.NAME);
+        console.log(stateID);
+
+        // Retrieve vaccine data based on the state ID
+        var stateVaccineData = actuals.AK;
+        console.log(stateVaccineData);
+
+        // Add the vaccine data to the properties section for that state
+        stateProperties['vaccineNumber'] = stateVaccineData;
+        // console.log(stateProperties);
     }
 
 
