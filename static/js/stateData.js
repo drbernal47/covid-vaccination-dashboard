@@ -6,7 +6,7 @@ function getActuals() {
     var url = `https://api.covidactnow.org/v2/states.timeseries.json?apiKey=${json_api_key}`;
 
     return d3.json(url).then(function(response) {
-        console.log(response);
+        // console.log(response);
 
         var states = {};
         for (i=0; i < response.length; i++) {
@@ -61,28 +61,44 @@ var geojson;
 // Grab data with d3
 d3.json(geoData).then(function(data) {
 
-    var actuals = getActuals();
-    console.log(actuals);
+    // var actuals = getActuals();
+    // console.log(actuals);
 
     // Remove geojson for Puerto Rico
 
     // Add the property: vaccinationsCompletedData
-    console.log(data);
+    // console.log(data);
 
     for (i=0; i < 52; i++) {
         // Find the properties section of each state
         var stateProperties = data.features[i].properties;
 
         // Get the state name and convert to state ID
-        var stateID = toStateID(stateProperties.NAME);
+        var stateID = toStateID(stateProperties['NAME']);
         console.log(stateID);
 
+        // This code just for testing promise inside of promise
+        var url = `https://api.covidactnow.org/v2/states.timeseries.json?apiKey=${json_api_key}`;
+        d3.json(url).then(function(response) {
+          console.log(response[0]);
+
+          for (j=0; j < 53; j++) {
+            var stateData = response[j];
+            var candidateID = stateData.state;
+            
+            if (candidateID === stateID) {
+              var stateVaccineData = 43;
+              stateProperties['vaccineNumber'] = stateVaccineData;
+            }
+          }
+        });
+
         // Retrieve vaccine data based on the state ID
-        var stateVaccineData = actuals.AK;
-        console.log(stateVaccineData);
+        // var stateVaccineData = actuals[stateID];
+        // console.log(stateVaccineData);
 
         // Add the vaccine data to the properties section for that state
-        stateProperties['vaccineNumber'] = stateVaccineData;
+        // stateProperties['vaccineNumber'] = stateVaccineData;
         // console.log(stateProperties);
     }
 
