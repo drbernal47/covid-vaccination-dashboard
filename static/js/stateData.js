@@ -64,8 +64,6 @@ d3.json(geoData).then(function(data) {
     var actuals = getActuals();
     console.log(actuals);
 
-    console.log(Object.keys(actuals))
-
     // Remove geojson for Puerto Rico
 
     // Add the property: vaccinationsCompletedData
