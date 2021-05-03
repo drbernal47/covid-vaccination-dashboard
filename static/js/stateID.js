@@ -100,8 +100,7 @@ function toStateName(stateID) {
             break;
         case 'WV': return 'West Virginia';
             break;
-        case 'WY': return 'Wyoming';
-            break;
+        case 'WY': return 'Wyoming';   
         default:
             return('State not found');
     }

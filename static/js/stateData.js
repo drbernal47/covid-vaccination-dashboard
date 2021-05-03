@@ -2,7 +2,6 @@ console.log('stateData.js');
 
 
 // Function that retrieves all state vaccine data (from JSON – later change to flask route)
-
 var url = `https://api.covidactnow.org/v2/states.timeseries.json?apiKey=${json_api_key}`;
 
 d3.json(url).then(function(response) {
@@ -56,9 +55,7 @@ function createMap(states) {
   // Grab data with d3
   d3.json(geoData).then(function(data) {
 
-      
     for (i=0; i < 52; i++) {
-
       // Find the properties section of each state
       if (data.features[i].properties.NAME !== "Puerto Rico"){
           var stateProperties = data.features[i].properties;
@@ -72,8 +69,6 @@ function createMap(states) {
             stateProperties['VACCINESCOMPLETERATIO'] = states[key];
           }
         })
-
-    
       console.log(stateProperties);
     }
 
