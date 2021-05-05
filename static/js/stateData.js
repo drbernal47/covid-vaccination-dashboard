@@ -167,56 +167,58 @@ function createLineGraph(otherStates) {
     dates.push(todayDate);
   }
 
-  // Loop through data to get USA aggregate
+  // Loop through data to get USA aggregate (go through each DAY and add up all state data from that day)
+
   var vaccinesInitiated = [];
+  var vaccinesCompleted = [];
   for (j=0; j < 111; j++) {
 
-    var dailyTotal = 0;
-    for (i=0; i < 51; i++) {
+    var dailyTotalInitiated = 0;
+    var dailyTotalCompleted = 0;
+    Object.keys(otherStates).forEach(key => {
+      var stateInfo = otherStates[key];
+      var numDays = stateInfo.length;
+      var stateVI = stateInfo[numDays - (111 - j)]['vaccinationsInitiated'];
+      var stateVC = stateInfo[numDays - (111 - j)]['vaccinationsCompleted'];
+      dailyTotalInitiated += stateVI;
+      dailyTotalCompleted += stateVC;
+    });
+    vaccinesInitiated.push(dailyTotalInitiated);
+    vaccinesCompleted.push(dailyTotalCompleted);
 
-      console.log(otherStates[i]);
-      console.log('anybody there');
-
-      var stateVI = otherStates[i][-j]['vaccinationsInitiated'];
-      console.log(stateVI);
-      dailyTotal += stateVI;
-    }
-
-    vaccinesInitiated.push(dailyTotal);
   }
-
   console.log(vaccinesInitiated);
+  console.log(vaccinesCompleted);
 
+  console.log(vaccinesInitiated[109] + vaccinesCompleted[109]);
 
-
-  // for (i=0; i < otherStates.length; i++) {
-  //   for (j=1, j < 112; j++) {
-  //     var stateVI = otherStates[i][-j]['vaccinationsInitiated'];
-
-  //   }
-  // }
 
 
   var traceInitiated = {
     x: dates,
-    // y is the vaccinesInitiated
-    type: 'scatter'
+    y: vaccinesInitiated,
+    type: 'scatter',
+    // fill: 'tozeroy'
+    fill: 'tonexty'
   }
 
   var traceCompleted = {
     x: dates,
-    // y is vaccinesCompleted
-    type: 'scatter'
+    y: vaccinesCompleted,
+    type: 'scatter',
+    // fill: 'tonexty'
+    fill: 'tozeroy'
   }
 
 
-  // Last 111 days from actuals.timeSeries
-
   // Create data
+  var data = [traceInitiated, traceCompleted];
 
 
   // Create layout
+  
 
 
   // Combine into Plotly
+  Plotly.newPlot('line-graph',data);
 }
