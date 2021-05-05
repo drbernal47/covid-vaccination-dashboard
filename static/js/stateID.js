@@ -38,7 +38,7 @@ function toStateName(stateID) {
             break;
         case 'LA': return 'Louisiana';
             break;
-        case 'MA': return 'Massachussettes';
+        case 'MA': return 'Massachusetts';
             break;
         case 'MD': return 'Maryland';
             break;

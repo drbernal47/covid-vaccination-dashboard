@@ -18,16 +18,32 @@ d3.json(url).then(function(response) {
     if (stateID != 'MP') {
       if (stateID != 'PR') {
         var stateName = toStateName(stateID);
-        states[stateName] = vcr;     
-        
+        states[stateName] = vcr;  
       }
     }
   }
-console.log(states);
+  // console.log(states);
+
+  // object to hold other vaccination data
+  var otherStates = {};
+  for (i=0; i < response.length; i++) {
+    var stateData = response[i];
+    var stateID = stateData.state;
+    var stateTimeseries = stateData.actualsTimeseries;
+    
+    if (stateID != 'MP') {
+      if (stateID != 'PR') {
+        var stateName = toStateName(stateID);
+        otherStates[stateName] = stateTimeseries;  
+      }
+    }
+  }
   
 createMap(states); 
+
+createLineGraph(otherStates);
 });
-      
+
 
 // Initial map of the United States with choropleth of vaccine data
 // Creating map object
@@ -69,7 +85,7 @@ function createMap(states) {
             stateProperties['VACCINESCOMPLETERATIO'] = states[key];
           }
         })
-      console.log(stateProperties);
+      // console.log(stateProperties);
     }
 
       // Create a new choropleth layer
@@ -95,8 +111,10 @@ function createMap(states) {
     
         // Binding a pop-up to each layer
         onEachFeature: function(feature, layer) {
+          var ratio = feature.properties.VACCINESCOMPLETERATIO;
+          var percent = toPercent(ratio);
           layer.bindPopup("State: " + feature.properties.NAME + "<br>Vaccinations Completed:<br>" +
-             + feature.properties.VACCINESCOMPLETERATIO);
+             + percent + "%");
         }
       }).addTo(myMap);
     
@@ -112,8 +130,8 @@ function createMap(states) {
         // Add min & max
         var legendInfo = "<h1>Vaccinations Completed Ratio</h1>" +
           "<div class=\"labels\">" +
-            "<div class=\"min\">" + limits[0] + "</div>" +
-            "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+            "<div class=\"min\">" + toPercent(limits[0]) + "%</div>" +
+            "<div class=\"max\">" + toPercent(limits[limits.length - 1]) + "%</div>" +
           "</div>";
     
         div.innerHTML = legendInfo;
@@ -132,3 +150,75 @@ function createMap(states) {
   });
 
 };
+
+
+
+
+function createLineGraph(otherStates) {
+  // if (state === 'USA') {
+  //   // Loop through all state data to get entire population data
+  // }
+
+  // Create a trace
+  // FOR NOW – just going to use Alabama to create x-values
+  var dates = [];
+  for (i=319; i < 430; i++) {
+    var todayDate = otherStates['Alabama'][i]['date'];
+    dates.push(todayDate);
+  }
+
+  // Loop through data to get USA aggregate (go through each DAY and add up all state data from that day)
+
+  var vaccinesInitiated = [];
+  var vaccinesCompleted = [];
+  for (j=0; j < 111; j++) {
+
+    var dailyTotalInitiated = 0;
+    var dailyTotalCompleted = 0;
+    Object.keys(otherStates).forEach(key => {
+      var stateInfo = otherStates[key];
+      var numDays = stateInfo.length;
+      var stateVI = stateInfo[numDays - (111 - j)]['vaccinationsInitiated'];
+      var stateVC = stateInfo[numDays - (111 - j)]['vaccinationsCompleted'];
+      dailyTotalInitiated += stateVI;
+      dailyTotalCompleted += stateVC;
+    });
+    vaccinesInitiated.push(dailyTotalInitiated);
+    vaccinesCompleted.push(dailyTotalCompleted);
+
+  }
+  // console.log(vaccinesInitiated);
+  // console.log(vaccinesCompleted);
+
+  // console.log(vaccinesInitiated[109] + vaccinesCompleted[109]);
+
+
+
+  var traceInitiated = {
+    x: dates,
+    y: vaccinesInitiated,
+    type: 'scatter',
+    // fill: 'tozeroy'
+    fill: 'tonexty'
+  }
+
+  var traceCompleted = {
+    x: dates,
+    y: vaccinesCompleted,
+    type: 'scatter',
+    // fill: 'tonexty'
+    fill: 'tozeroy'
+  }
+
+
+  // Create data
+  var data = [traceInitiated, traceCompleted];
+
+
+  // Create layout
+  
+
+
+  // Combine into Plotly
+  Plotly.newPlot('line-graph',data);
+}
