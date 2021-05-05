@@ -22,7 +22,7 @@ d3.json(url).then(function(response) {
       }
     }
   }
-  console.log(states);
+  // console.log(states);
 
   // object to hold other vaccination data
   var otherStates = {};
@@ -187,10 +187,10 @@ function createLineGraph(otherStates) {
     vaccinesCompleted.push(dailyTotalCompleted);
 
   }
-  console.log(vaccinesInitiated);
-  console.log(vaccinesCompleted);
+  // console.log(vaccinesInitiated);
+  // console.log(vaccinesCompleted);
 
-  console.log(vaccinesInitiated[109] + vaccinesCompleted[109]);
+  // console.log(vaccinesInitiated[109] + vaccinesCompleted[109]);
 
 
 
