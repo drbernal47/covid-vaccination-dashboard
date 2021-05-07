@@ -40,7 +40,7 @@ d3.json(url).then(function(response) {
   }
   
 createMap(states); 
-
+consoloe
 createLineGraph(otherStates);
 });
 
@@ -106,16 +106,43 @@ function createMap(states) {
           // Border color
           color: "#fff",
           weight: 1,
-          fillOpacity: 0.8
+          fillOpacity: 0.5
         },
     
         // Binding a pop-up to each layer
         onEachFeature: function(feature, layer) {
           var ratio = feature.properties.VACCINESCOMPLETERATIO;
           var percent = toPercent(ratio);
-          layer.bindPopup("State: " + feature.properties.NAME + "<br>Vaccinations Completed:<br>" +
+          var stateName = feature.properties.NAME;
+
+          layer.on({
+            mouseover: function(event) {
+              layer = event.target;
+              layer.setStyle({
+                fillOpacity: 0.9
+              });
+            },
+            mouseout: function(event) {
+              layer = event.target;
+              layer.setStyle({
+                fillOpacity: 0.5
+              });
+            },
+
+            click: function(event) {
+              // myMap.fitBounds(event.target.getBounds());
+              redrawLineGraph(stateName);
+            }
+
+          });
+
+          layer.bindPopup("State: " + stateName + "<br>Vaccinations Completed:<br>" +
              + percent + "%");
-        }
+          }
+
+          
+
+
       }).addTo(myMap);
     
 
@@ -147,11 +174,16 @@ function createMap(states) {
       // Adding legend to the map
       legend.addTo(myMap);
     
-  });
+    });
 
 };
 
 
+function redrawLineGraph(stateName) {
+  console.log(`redrawLinGraph ${stateName}`);
+
+
+}
 
 
 function createLineGraph(otherStates) {

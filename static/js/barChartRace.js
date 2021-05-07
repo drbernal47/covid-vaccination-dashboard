@@ -39,40 +39,40 @@ var sampleData = [
     value: 12934},
 ];
 
-console.log(sampleData);
+// console.log(sampleData);
 
 
-// // Chart
-// chart = {
-//     replay;
+// // // Chart
+// // chart = {
+// //     replay;
   
-//     const svg = d3.create("svg")
-//         .attr("viewBox", [0, 0, width, height]);
+// //     const svg = d3.create("svg")
+// //         .attr("viewBox", [0, 0, width, height]);
   
-//     const updateBars = bars(svg);
-//     const updateAxis = axis(svg);
-//     const updateLabels = labels(svg);
-//     const updateTicker = ticker(svg);
+// //     const updateBars = bars(svg);
+// //     const updateAxis = axis(svg);
+// //     const updateLabels = labels(svg);
+// //     const updateTicker = ticker(svg);
   
-//     yield svg.node();
+// //     yield svg.node();
   
-//     for (const keyframe of keyframes) {
-//       const transition = svg.transition()
-//           .duration(duration)
-//           .ease(d3.easeLinear);
+// //     for (const keyframe of keyframes) {
+// //       const transition = svg.transition()
+// //           .duration(duration)
+// //           .ease(d3.easeLinear);
   
-//       Extract the top bar’s value.
-//       x.domain([0, keyframe[1][0].value]);
+// //       Extract the top bar’s value.
+// //       x.domain([0, keyframe[1][0].value]);
   
-//       updateAxis(keyframe, transition);
-//       updateBars(keyframe, transition);
-//       updateLabels(keyframe, transition);
-//       updateTicker(keyframe, transition);
+// //       updateAxis(keyframe, transition);
+// //       updateBars(keyframe, transition);
+// //       updateLabels(keyframe, transition);
+// //       updateTicker(keyframe, transition);
   
-//       invalidation.then(() => svg.interrupt());
-//       await transition.end();
-//     }
-//   };
+// //       invalidation.then(() => svg.interrupt());
+// //       await transition.end();
+// //     }
+// //   };
 
 // Generate names for each bar based on data
 var names = new Set(sampleData.map(d => d.name))
