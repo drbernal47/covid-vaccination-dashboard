@@ -1,39 +1,39 @@
 console.log('barChartRace.js loaded');
 
 var sampleData = [
-    {date: '2000-01-01',
+    {date: Date.parse('2000-01-01'),
     name: 'Coca-Cola',
     category: 'Beverages',
     value: 72537},
-    {date: '2000-01-01',
+    {date: Date.parse('2000-01-01'),
     name: 'Pepsi',
     category: 'Beverages',
     value: 63723},
-    {date: '2000-01-01',
+    {date: Date.parse('2000-01-01'),
     name: 'McDonalds',
     category: 'Food',
     value: 372923},
-    {date: '2001-01-01',
+    {date: Date.parse('2001-01-01'),
     name: 'Coca-Cola',
     category: 'Beverages',
     value: 42384},
-    {date: '2001-01-01',
+    {date: Date.parse('2001-01-01'),
     name: 'Pepsi',
     category: 'Beverages',
     value: 24784},
-    {date: '2001-01-01',
+    {date: Date.parse('2001-01-01'),
     name: 'McDonalds',
     category: 'Food',
     value: 198363},
-    {date: '2002-01-01',
+    {date: Date.parse('2002-01-01'),
     name: 'Coca-Cola',
     category: 'Beverages',
     value: 10292},
-    {date: '2002-01-01',
+    {date: Date.parse('2002-01-01'),
     name: 'Pepsi',
     category: 'Beverages',
     value: 8273},
-    {date: '2002-01-01',
+    {date: Date.parse('2002-01-01'),
     name: 'McDonalds',
     category: 'Food',
     value: 12934},
@@ -74,6 +74,23 @@ console.log(sampleData);
 //     }
 //   };
 
-d3.group(sampleData, d => d.name);
+// Generate names for each bar based on data
+var names = new Set(sampleData.map(d => d.name))
+console.log(names);
 
-d3 = require("d3@6");
+// Generate date values based on data
+datevalues = Array.from(d3.rollup(sampleData, ([d]) => d.value, d => +d.date, d => d.name))
+  .map(([date, sampleData]) => [new Date(date), sampleData])
+  .sort(([a], [b]) => d3.ascending(a, b))
+console.log(datevalues);
+
+
+// Function that ranks the values
+function rank(value) {
+    const data = Array.from(names, name => ({name, value: value(name)}));
+    data.sort((a, b) => d3.descending(a.value, b.value));
+    for (let i = 0; i < data.length; ++i) data[i].rank = Math.min(n, i);
+    return data;
+  }
+
+// d3 = require("d3@6");
