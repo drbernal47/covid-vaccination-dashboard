@@ -12,7 +12,7 @@ from config import username, password
 
 # define the database connection parameters
 database_name = 'covid_db'
-connection_string = f'postgresql://{username}:{password}@localhost:5432/{database_name'
+connection_string = f'postgresql://{username}:{password}@localhost:5432/{database_name}'
 
 # connect to the database
 engine = create_engine(connection_string)
@@ -42,7 +42,7 @@ def QueryCovidDataBase():
 
     vaccine_list = []
     for col1, col2, etc in results:
-        dict {}
+        dict = {}
         dict["col1"] = col1
         dict["col2"] = col2
         dict["etc"] = etc
