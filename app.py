@@ -6,12 +6,12 @@ from flask import jsonify
 # import functions from SQL Alchemy
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 from config import username, password
 
 # define the database connection parameters
-database_name = 'covid_db'
+database_name = 'vaccineData_db'
 connection_string = f'postgresql://{username}:{password}@localhost:5432/{database_name}'
 
 # connect to the database
@@ -37,15 +37,22 @@ def QueryCovidDataBase():
 
     # open a session, run the query, and then close the session
     session = Session(engine)
-    results = session.query(table.col1, tables.col2, etc).all()
+    results = session.query(table.id, table.date, table.country, table.state, table.cases, table.new_cases, table.vaccines_distributed, table.vaccines_initiated, table.vaccines_completed).all()
     session.close()
 
     vaccine_list = []
-    for col1, col2, etc in results:
+
+    for id, date, country, state, cases, new_cases, vaccines_distributed, vaccines_initiated, vaccines_completed in results:
         dict = {}
-        dict["col1"] = col1
-        dict["col2"] = col2
-        dict["etc"] = etc
+        dict["id"] = id
+        dict["date"] = date
+        dict["country"] = country
+        dict["state"] = state
+        dict["cases"] = cases
+        dict["new_cases"] = new_cases
+        dict["vaccines_distributed"] = vaccines_distributed
+        dict["vaccines_initiated"] = vaccines_initiated
+        dict["vaccines_completed"] = vaccines_completed
         vaccine_list.append(dict)
 
     return jsonify(vaccine_list)
