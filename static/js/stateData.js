@@ -40,7 +40,7 @@ d3.json(url).then(function(response) {
   }
   
 createMap(states); 
-consoloe
+
 createLineGraph(otherStates);
 });
 
