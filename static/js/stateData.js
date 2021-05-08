@@ -73,7 +73,7 @@ function createMap(states) {
 
     for (i=0; i < 52; i++) {
       // Find the properties section of each state
-      if (data.features[i].properties.NAME !== "Puerto Rico"){
+      if (data.features[i].properties.NAME != "Puerto Rico"){
           var stateProperties = data.features[i].properties;
         }
           
