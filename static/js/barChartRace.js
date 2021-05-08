@@ -59,7 +59,7 @@ var sampleData = [
 
 // console.log(sampleData);
 
-d3.json('/vaccinations').then(response =>{
+d3.json('/vaccinations').then(response => {
   // console.log(response);
 
   // Push only desired dates into an array
@@ -285,53 +285,84 @@ d3.json('/vaccinations').then(response =>{
   }
 
 
-
   // Chart
-  async function renderGraph(controller = {}) {
+  window.renderGraph = async function () {
+    if (window.raceGraphController) {
+      window.raceGraphController.kill(); // kill the old - not to be taken out of context
+    }
+    var controller = window.raceGraphController = makeController();
     const svg = d3.select("#bar-chart-race")
       .attr("viewBox", [0, 0, width, height]);
-
     svg.selectAll('*').remove();
-
     const updateBars = bars(svg);
     const updateAxis = axis(svg);
     const updateLabels = labels(svg);
     const updateTicker = ticker(svg);
 
-    //maybe give us an update with svg.node()
 
+    //maybe give us an update with svg.node()
     for (const keyframe of keyframes) {
       const transition = svg.transition()
         .duration(duration)
         .ease(d3.easeLinear);
-
-      // Extract the top bar’s value.
+      // Extract the top bar's value.
       x.domain([0, keyframe[1][0].value]);
-
       updateAxis(keyframe, transition);
       updateBars(keyframe, transition);
       updateLabels(keyframe, transition);
       updateTicker(keyframe, transition);
 
+
       // invalidation.then(() => svg.interrupt());
       await transition.end();
-
-      if (controller.pause) {
+      if (controller.paused) {
         await controller.resumePromise;
       }
-
-      if (controller.kill) {
+      if (controller.killed) {
         return;
       }
     }
   };
+  function makeController() {
+    return {
+      kill: function () {
+        this.killed = true;
+        this.resume();
+      },
+      pause: function () {
+        if (!this.paused) {
+          this.paused = true;
+          this.resumePromise = new Promise(resolve => {
+            this.resume = function () {
+              this.paused = false;
+              resolve();
+            }
+          });
+        }
+      },
+      resume: function () { },
+      paused: false,
+      killed: false,
+    };
+  }
 
 
 
 
 
-renderGraph();
 
+  renderGraph();
+
+  var playbutton = document.getElementById("Play/Pause");
+
+  playbutton.onclick = () => {
+    if (raceGraphController.paused)
+      raceGraphController.resume();
+    else
+      raceGraphController.pause();
+  }
+
+  document.getElementById("Restart").onclick = renderGraph;
 
 
 
@@ -342,3 +373,4 @@ renderGraph();
 
 
 });
+
