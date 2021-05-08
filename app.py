@@ -12,7 +12,7 @@ from config import username, password
 
 # define the database connection parameters
 database_name = 'vaccineData_db'
-connection_string = f'postgresql://{username}:{password}@localhost:5433/{database_name}'
+connection_string = f'postgresql://{username}:{password}@localhost:5432/{database_name}'
 
 # connect to the database
 engine = create_engine(connection_string)
@@ -37,15 +37,15 @@ def QueryCovidDataBase():
 
     # open a session, run the query, and then close the session
     session = Session(engine)
-    results = session.query(table.id, table.date, table.country, table.state, table.cases, table.new_cases, table.vaccines_distributed, table.vaccines_initiated, table.vaccines_completed).all()
+    results = session.query(table.id, table.date, table.country, table.state, table.cases, table.new_cases, table.vaccines_distributed, table.vaccines_initiated, table.vaccines_completed, table.infection_rate).all()
     session.close()
 
     vaccine_list = []
 
-    for id, date, country, state, cases, new_cases, vaccines_distributed, vaccines_initiated, vaccines_completed in results:
+    for id, date, country, state, cases, new_cases, vaccines_distributed, vaccines_initiated, vaccines_completed, infection_rate in results:
         dict = {}
         dict["id"] = id
-        dict["date"] = date
+        dict["date"] = str(date)
         dict["country"] = country
         dict["state"] = state
         dict["cases"] = cases
@@ -53,6 +53,7 @@ def QueryCovidDataBase():
         dict["vaccines_distributed"] = vaccines_distributed
         dict["vaccines_initiated"] = vaccines_initiated
         dict["vaccines_completed"] = vaccines_completed
+        dict["infection_rate"] = infection_rate
         vaccine_list.append(dict)
 
     return jsonify(vaccine_list)

@@ -11,6 +11,7 @@ The following dashboard analyzes Covid-19 vaccinations in the United States. Eac
 1. Go to https://www.mapbox.com/ and create a map API key.
 1. In the config.js file, type "map_api_key" = "*YOUR MAP API KEY*";
 1. Save the config.js file.
+1. Create a file called config.py outside of all the folders.
 1. In the config.py file, type "username = '*YOUR PGADMIN USERNAME HERE*'"
 1. In the config.py file, type "password = '*YOUR PGADMIN PASSWORD HERE*'"
 1. Save the config.py file.
