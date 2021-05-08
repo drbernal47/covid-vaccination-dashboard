@@ -1,7 +1,7 @@
 # Covid-Vaccination-Dashboard
 This project tells a story about Covid-19 vaccines through data visualizations. We used API Data from the Covid Act Now website and created a dashboard using a Flask server, Leaflet Map, a Plotly Chart, and a Bar Chart Race. 
 
-The following dashboard analyzes Covid-19 vaccinations in the United States. Each state has been analyzed so that the three visualizations illustrate the percentage of population vaccinated, number of people vaccinated in the United States and per state, and number of Covid-19 cases per state.
+The following dashboard analyzes Covid-19 vaccinations in the United States. Each state has been analyzed so that the three visualizations illustrate the percentage of population vaccinated, number of people vaccinated in the United States and per state, and number of Covid-19 cases per state. Each visualization analyzes 111 days worth of vaccine data from January 14, 2021 to May 3, 2021.
 
 # Directions
 
