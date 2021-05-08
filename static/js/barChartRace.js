@@ -60,7 +60,7 @@ var sampleData = [
 // console.log(sampleData);
 
 d3.json('/vaccinations').then(response =>{
-  // console.log(response);
+  console.log(response);
 
   // Push only desired dates into an array
   caseData = [];
@@ -69,10 +69,12 @@ d3.json('/vaccinations').then(response =>{
     var date = Date.parse(item.date);
     if (date >= Date.parse('2021-01-14')) {
       var entry = item;
-      // CHANGE to based on Infection Rate
-      entry['category'] = 'Random';
+      entry['category'] = 'Decreasing';
       entry['date'] = date;
-      entry['value'] = item.cases;
+      entry['value'] = item.infection_rate;
+      if (item.infection_rate >= 1) {
+        entry['category'] = 'Increasing';
+      }
 
       if (entry.state != 'PR') {
         if (entry.state != 'MP') {
@@ -98,6 +100,7 @@ d3.json('/vaccinations').then(response =>{
   };
   var barSize = 30;
 
+
   color = (function () {
     const scale = d3.scaleOrdinal(d3.schemeTableau10);
     if (caseData.some(d => d.category !== undefined)) {
@@ -108,11 +111,12 @@ d3.json('/vaccinations').then(response =>{
     return d => scale(d.state);
   })();
 
+
   // Format dates for display
   var formatDate = d3.utcFormat("%b %d %Y");
 
   // Format the numbers on the bars
-  var formatNumber = d3.format(",d");
+  var formatNumber = d3.format(",.3f");
 
   // Determine the duration of animation
   var duration = 250;
@@ -131,7 +135,7 @@ d3.json('/vaccinations').then(response =>{
   console.log(datevalues);
 
   // Determine the amount of interpolation (frames between date values)
-  var k = 1;
+  var k = 5;
 
   keyframes = (function () {
     const keyframes = [];
@@ -253,9 +257,6 @@ d3.json('/vaccinations').then(response =>{
         .attr("transform", d => `translate(${x(d.value)},${y(d.rank)})`)
         .call(g => g.select("tspan").tween("text", d => textTween((prev.get(d) || d).value, d.value))))
   }
-
-
-
 
 
 
