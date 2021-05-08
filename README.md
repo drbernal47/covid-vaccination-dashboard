@@ -1,5 +1,5 @@
 # Covid-Vaccination-Dashboard
-This project tells a story about Covid-19 vaccines through data visualizations. We used API Data from the Covid Act Now website and created a dashboard using a Flask server, Leaflet Map, a Plotly Chart, and a Bar Chart Race. 
+This project tells a story about Covid-19 vaccines through data visualizations. We used API Data from https://covidactnow.org/data-api and created a dashboard using a Flask server, Leaflet Map, a Plotly Chart, and a Bar Chart Race. 
 
 The following dashboard analyzes Covid-19 vaccinations in the United States. Each state has been analyzed so that the three visualizations illustrate the percentage of population vaccinated, number of people vaccinated in the United States and per state, and number of Covid-19 cases per state. Each visualization analyzes 111 days worth of vaccine data from January 14, 2021 to May 3, 2021.
 
@@ -10,8 +10,6 @@ The following dashboard analyzes Covid-19 vaccinations in the United States. Eac
 1. Create a file called config.js in the "js" folder.
 1. Go to https://www.mapbox.com/ and create a map API key.
 1. In the config.js file, type "map_api_key" = "*YOUR MAP API KEY*";
-1. Go to https://apidocs.covidactnow.org/#register and register for a json API key.
-1. In the config.js file, type "json_api_key" = "*YOUR JSON API KEY*";
 1. Save the config.js file.
 1. In the config.py file, type "username = '*YOUR PGADMIN USERNAME HERE*'"
 1. In the config.py file, type "password = '*YOUR PGADMIN PASSWORD HERE*'"

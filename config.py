@@ -1,2 +1,2 @@
 username = 'postgres'
-password = '123'
+password = 'Password'
