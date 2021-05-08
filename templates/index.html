@@ -26,12 +26,11 @@
 				<div class="text-center">
 					  <h4>Since January 2020, Covid-19 has spread world-wide infecting millions. For many, the release of the Covid-19 vaccine
 						  suggested an end in sight to the long lasting 2020 pandemic. 
-						  The following dashboard analyzes Covid-19 vaccinations in the United States. Each state has been analzyed so that the below visualizations
+						  The following dashboard analyzes Covid-19 vaccinations in the United States. Each state has been analyzed so that the below visualizations
 						  illustrate the percentage of population vaccinated, number of people vaccinated in the United States and per state,
 						  and number of Covid-19 cases per state. Each visualization analyzes 111 days worth of 
-						  vaccine data.
+						  vaccine data from January 14, 2021 to May 3, 2021.
 					  </h4>
-					  <p></p>
 				  </div>
 				</div>
 
@@ -39,8 +38,6 @@
 			  <div class="col-md-12">
 				  <h5>Percentage of Population Vaccinated</h5>
 				<div id="map">
-					<p></p>
-					<p></p>
 				</div>
 			  </div>
 			
@@ -49,19 +46,20 @@
 				  <h5>Number of Vaccines Initiated & Completed</h5>
 				<div id="line-graph"></div>
 			  </div>
-			  <h6>Vaccines Initiated: This indicates the number of people vaccinated with the first dose.</h6>
-			  <h6>Vaccines Completed: This indicates the number of people vaccinated with both the first and second dose.</h6>
-		
+			  <h6>Vaccines Initiated: This indicates the number of people vaccinated with the first dose</h6>
+			  <h6>Vaccines Completed: This indicates the number of people vaccinated with both the first and second dose</h6>
 			</div>
 			
 			<div class="row">
 			  <div class="col-md-12">
-				  <h5>Number of Covid-19 Cases</h5>
+				  <h5>Infection Rate</h5>
 				<div>
 					<svg id="bar-chart-race"></svg>
 				</div>
 			  </div>
-					<h6> This data looks at cases from the past 111 days.</h6>
+			  <h6>Infection Rate R(t): The estimated number of new people each COVID-positive person will infect.</h6>
+			  <h6>R(t) greater than 1.0: Daily new Covid-19 cases are increasing</h6>
+			  <h6>R(t) less than 0.9: Covid-19 cases are decreasing</h6>
 			</div>
 		
 		
