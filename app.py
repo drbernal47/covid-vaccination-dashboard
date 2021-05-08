@@ -12,7 +12,7 @@ from config import username, password
 
 # define the database connection parameters
 database_name = 'vaccineData_db'
-connection_string = f'postgresql://{username}:{password}@localhost:5432/{database_name}'
+connection_string = f'postgresql://{username}:{password}@localhost:5433/{database_name}'
 
 # connect to the database
 engine = create_engine(connection_string)
