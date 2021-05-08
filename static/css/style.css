@@ -81,3 +81,17 @@ line-height: 160%;
 font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 font-size: 13px;
 }
+
+p {
+  font-size: 12px;
+}
+
+/* CSS for the buttons */
+button {
+  color: #0099CC; 
+  background: transparent;
+  border: 2px solid #0099CC;
+  border-radius: 6px;
+}
+
+button:hover {background-color: #64b6ed; color: white; }
