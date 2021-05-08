@@ -31,17 +31,12 @@ d3.json(url).then(function(response) {
     var stateID = stateData.state;
     var stateTimeseries = stateData.actualsTimeseries;
     
-    if (stateID != 'MP') {
-      if (stateID != 'PR') {
-        var stateName = toStateName(stateID);
-        otherStates[stateName] = stateTimeseries;  
-      }
-    }
+  
   }
   
 createMap(states); 
 
-createLineGraph(otherStates);
+createLineGraph();
 });
 
 
@@ -182,47 +177,124 @@ function createMap(states) {
 function redrawLineGraph(stateName) {
   console.log(`redrawLinGraph ${stateName}`);
 
+  d3.json("/vaccinations").then(function(data) {
+    console.log(data);
 
+
+    var vaccinesInitiated = [];
+    var vaccinesCompleted = [];
+    var dates = [];
+
+    for (var i = 0; i < data.length; i ++) {
+      var stateID = data[i].state;
+      data[i].state = toStateName(stateID);
+
+      if (data[i].state === stateName && data[i].vaccines_initiated !== null) {
+      
+        vaccinesInitiated.push(data[i].vaccines_initiated);
+        vaccinesCompleted.push(data[i].vaccines_completed);
+        dates.push(data[i].date);
+      }
+
+    }
+    
+    console.log(vaccinesInitiated);
+    console.log(vaccinesCompleted);
+    console.log(dates);
+
+  var traceInitiated = {
+    x: dates,
+    y: vaccinesInitiated,
+    type: 'scatter',
+    fill: 'tonexty',
+    name: 'Initiated'
+  }
+
+  var traceCompleted = {
+    x: dates,
+    y: vaccinesCompleted,
+    type: 'scatter',
+    fill: 'tozeroy',
+    name: 'Completed'
+  }
+
+  // Create data
+  var data = [traceInitiated, traceCompleted];
+
+  // Create layout
+  var layout = {
+    title: `Vaccines for ${stateName}`,
+    xaxis: {title: "Date"},
+    yaxis: {title: "Vaccine Counts"}
+  }
+
+  // Combine into Plotly
+  Plotly.newPlot('line-graph',data, layout);
+});
 }
 
 
-function createLineGraph(otherStates) {
-  // if (state === 'USA') {
-  //   // Loop through all state data to get entire population data
-  // }
+function createLineGraph() {
+  
+  console.log("createLinGraph");
 
-  // Create a trace
-  // FOR NOW – just going to use Alabama to create x-values
-  var dates = [];
-  for (i=319; i < 430; i++) {
-    var todayDate = otherStates['Alabama'][i]['date'];
-    dates.push(todayDate);
-  }
+  d3.json("/vaccinations").then(function(data) {
+    console.log(data);
 
-  // Loop through data to get USA aggregate (go through each DAY and add up all state data from that day)
 
-  var vaccinesInitiated = [];
-  var vaccinesCompleted = [];
-  for (j=0; j < 111; j++) {
+    
+    var dates = [];
 
-    var dailyTotalInitiated = 0;
-    var dailyTotalCompleted = 0;
-    Object.keys(otherStates).forEach(key => {
-      var stateInfo = otherStates[key];
-      var numDays = stateInfo.length;
-      var stateVI = stateInfo[numDays - (111 - j)]['vaccinationsInitiated'];
-      var stateVC = stateInfo[numDays - (111 - j)]['vaccinationsCompleted'];
-      dailyTotalInitiated += stateVI;
-      dailyTotalCompleted += stateVC;
-    });
-    vaccinesInitiated.push(dailyTotalInitiated);
-    vaccinesCompleted.push(dailyTotalCompleted);
+    for (var i = 0; i < data.length; i ++) {
+      var stateID = data[i].state;
+      data[i].state = toStateName(stateID);
 
-  }
-  // console.log(vaccinesInitiated);
-  // console.log(vaccinesCompleted);
 
-  // console.log(vaccinesInitiated[109] + vaccinesCompleted[109]);
+      if (data[i].state === "Alaska" && data[i].vaccines_initiated !== null) {
+
+        dates.push(data[i].date);
+      }
+
+    }
+      console.log(dates);
+    
+
+    var vaccinesInitiated = [];
+    var vaccinesCompleted = [];
+      
+    for (var i = 0; i < dates.length; i ++) {
+        
+      var dailyTotalInitiated = 0;
+      var dailyTotalCompleted = 0;
+
+      
+      for (var j = 0; j < data.length; j ++) {
+
+        if ( data[j].vaccines_initiated !== null) {
+
+          if (data[j].date === dates[i]) {
+            var dailyInit = data[j].vaccines_initiated;
+            var dailyComp = data[j].vaccines_completed;
+
+            
+            dailyTotalInitiated += dailyInit;
+            dailyTotalCompleted += dailyComp;
+          }
+        }
+      } 
+
+      
+      vaccinesInitiated.push(dailyTotalInitiated);
+      vaccinesCompleted.push(dailyTotalCompleted);
+      
+    }
+        
+      
+    
+    console.log(vaccinesInitiated);
+    console.log(vaccinesCompleted);
+
+  
 
 
 
@@ -231,7 +303,9 @@ function createLineGraph(otherStates) {
     y: vaccinesInitiated,
     type: 'scatter',
     // fill: 'tozeroy'
-    fill: 'tonexty'
+    fill: 'tonexty',
+    name: 'Initiated'
+      
   }
 
   var traceCompleted = {
@@ -239,7 +313,8 @@ function createLineGraph(otherStates) {
     y: vaccinesCompleted,
     type: 'scatter',
     // fill: 'tonexty'
-    fill: 'tozeroy'
+    fill: 'tozeroy',
+    name: 'Completed'
   }
 
 
@@ -248,9 +323,14 @@ function createLineGraph(otherStates) {
 
 
   // Create layout
-  
+  var layout = {
+    title: `Vaccines for the U.S.`,
+    xaxis: {title: "Date"},
+    yaxis: {title: "Vaccine Counts"}
+  }
 
 
   // Combine into Plotly
-  Plotly.newPlot('line-graph',data);
+  Plotly.newPlot('line-graph',data,layout);
+ });
 }

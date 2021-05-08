@@ -45,7 +45,7 @@ def QueryCovidDataBase():
     for id, date, country, state, cases, new_cases, vaccines_distributed, vaccines_initiated, vaccines_completed, infection_rate in results:
         dict = {}
         dict["id"] = id
-        dict["date"] = date
+        dict["date"] = str(date)
         dict["country"] = country
         dict["state"] = state
         dict["cases"] = cases
