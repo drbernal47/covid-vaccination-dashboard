@@ -9,8 +9,9 @@ CREATE TABLE vaccinations (
   vaccines_initiated FLOAT,
   vaccines_completed FLOAT,
   infection_rate FLOAT,
+  vaccinations_completed_ratio FLOAT,
   CONSTRAINT PK_date PRIMARY KEY(date, state)
 );
 
 
-select * from vaccinations
+select * from vaccinations;
