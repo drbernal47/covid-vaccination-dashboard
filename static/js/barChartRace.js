@@ -87,19 +87,19 @@ d3.json('/vaccinations').then(response => {
     }
   });
 
-  console.log(caseData);
+  // console.log(caseData);
 
 
   // Define SVG parameters for later
-  var width = 800;
-  var height = 600;
+  var width = 700;
+  var height = 340;
   var margin = {
     left: 25,
     right: 25,
     top: 25,
     bottom: 25
   };
-  var barSize = 30;
+  var barSize = 20;
 
 
   color = (function () {
@@ -133,10 +133,10 @@ d3.json('/vaccinations').then(response => {
   datevalues = Array.from(d3.rollup(caseData, ([d]) => d.value, d => +d.date, d => d.state))
     .map(([date, caseData]) => [new Date(date), caseData])
     .sort(([a], [b]) => d3.ascending(a, b))
-  console.log(datevalues);
+  // console.log(datevalues);
 
   // Determine the amount of interpolation (frames between date values)
-  var k = 5;
+  var k = 3;
 
   keyframes = (function () {
     const keyframes = [];
@@ -154,19 +154,19 @@ d3.json('/vaccinations').then(response => {
     return keyframes;
   })();
 
-  console.log(keyframes);
+  // console.log(keyframes);
 
   // Create nameframes
   var nameframes = d3.groups(keyframes.flatMap(([, data]) => data), d => d.state);
-  console.log(nameframes);
+  // console.log(nameframes);
 
   // Create prev (tells you when a state leaves the top ranks)
   var prev = new Map(nameframes.flatMap(([, data]) => d3.pairs(data, (a, b) => [b, a])));
-  console.log(prev);
+  // console.log(prev);
 
   // Create next (tells you when a state enters the top ranks)
   var next = new Map(nameframes.flatMap(([, data]) => d3.pairs(data)));
-  console.log(next);
+  // console.log(next);
 
   // Define linear scales to calculate x and y positions
   var x = d3.scaleLinear([0, 1], [margin.left, width - margin.right]);
@@ -230,7 +230,7 @@ d3.json('/vaccinations').then(response => {
   // Function Labels
   function labels(svg) {
     let label = svg.append("g")
-      .style("font", "bold 12px var(--sans-serif)")
+      .style("font", "bold 12px")
       .style("font-variant-numeric", "tabular-nums")
       .attr("text-anchor", "end")
       .selectAll("text");
@@ -242,13 +242,11 @@ d3.json('/vaccinations').then(response => {
           .attr("transform", d => `translate(${x((prev.get(d) || d).value)},${y((prev.get(d) || d).rank)})`)
           .attr("y", y.bandwidth() / 2)
           .attr("x", -6)
-          .attr("dy", "-0.25em")
-          .text(d => d.state)
+          .attr("dy", "0.3em")
+          .text(d => d.state + ": ")
           .call(text => text.append("tspan")
             .attr("fill-opacity", 0.7)
-            .attr("font-weight", "normal")
-            .attr("x", -6)
-            .attr("dy", "1.15em")),
+            .attr("font-weight", "normal")),
         update => update,
         exit => exit.transition(transition).remove()
           .attr("transform", d => `translate(${x((next.get(d) || d).value)},${y((next.get(d) || d).rank)})`)

@@ -4,40 +4,30 @@ console.log('stateData.js');
 // Function that retrieves all state vaccine data (from JSON – later change to flask route)
 var url = `https://api.covidactnow.org/v2/states.timeseries.json?apiKey=${json_api_key}`;
 
-d3.json(url).then(function(response) {
-  console.log(response);
+d3.json('/vaccinations').then(response => {
+  // console.log(response);
 
-  // object to hold state vaccination ratios
-  var states = {};
-  for (i=0; i < response.length; i++) {
-    var stateData = response[i];
-    var stateID = stateData.state;
-    var metrics = stateData.metrics;
-    var vcr = metrics.vaccinationsCompletedRatio;
-    
-    if (stateID != 'MP') {
-      if (stateID != 'PR') {
-        var stateName = toStateName(stateID);
-        states[stateName] = vcr;  
+  // Object to hold state vaccination ratios
+  var states = [];
+  for (i=0; i < response.length; i++){
+    var respDate = Date.parse(response[i]['date']);
+    if (respDate === Date.parse('2021-05-03')){
+      // console.log(response[i]);
+      var stateData = response[i];
+
+      if (stateData.state != 'PR'){
+        if (stateData.state != 'MP'){
+          states.push(stateData);
+        }
       }
     }
   }
-  // console.log(states);
+  console.log(states);
 
-  // object to hold other vaccination data
-  var otherStates = {};
-  for (i=0; i < response.length; i++) {
-    var stateData = response[i];
-    var stateID = stateData.state;
-    var stateTimeseries = stateData.actualsTimeseries;
-    
-  
-  }
-  
-createMap(states); 
+  createMap(states);
+});
 
 createLineGraph();
-});
 
 
 // Initial map of the United States with choropleth of vaccine data
@@ -75,11 +65,13 @@ function createMap(states) {
         //console.log(stateProperties);
 
         // retrieve vaccine complete ratio and add it to properties for each stat
-        Object.keys(states).forEach(key => {
-          if (stateProperties.NAME === key) {
-            stateProperties['VACCINESCOMPLETERATIO'] = states[key];
+        states.forEach(s => {
+          if (stateProperties.NAME === toStateName(s.state)){
+            stateProperties['VACCINESCOMPLETERATIO'] = s.vaccinations_completed_ratio;
           }
         })
+
+
       // console.log(stateProperties);
     }
 
@@ -150,7 +142,7 @@ function createMap(states) {
         var labels = [];
     
         // Add min & max
-        var legendInfo = "<h1>Vaccinations Completed Ratio</h1>" +
+        var legendInfo = "<h1>Vaccinations Completed (% of Pop.)</h1>" +
           "<div class=\"labels\">" +
             "<div class=\"min\">" + toPercent(limits[0]) + "%</div>" +
             "<div class=\"max\">" + toPercent(limits[limits.length - 1]) + "%</div>" +
@@ -206,7 +198,6 @@ function redrawLineGraph(stateName) {
     x: dates,
     y: vaccinesInitiated,
     type: 'scatter',
-    fill: 'tonexty',
     name: 'Initiated'
   }
 
@@ -214,7 +205,6 @@ function redrawLineGraph(stateName) {
     x: dates,
     y: vaccinesCompleted,
     type: 'scatter',
-    fill: 'tozeroy',
     name: 'Completed'
   }
 
@@ -236,10 +226,10 @@ function redrawLineGraph(stateName) {
 
 function createLineGraph() {
   
-  console.log("createLinGraph");
+  // console.log("createLineGraph");
 
   d3.json("/vaccinations").then(function(data) {
-    console.log(data);
+    // console.log(data);
 
 
     
@@ -256,7 +246,7 @@ function createLineGraph() {
       }
 
     }
-      console.log(dates);
+      // console.log(dates);
     
 
     var vaccinesInitiated = [];
@@ -291,8 +281,8 @@ function createLineGraph() {
         
       
     
-    console.log(vaccinesInitiated);
-    console.log(vaccinesCompleted);
+    // console.log(vaccinesInitiated);
+    // console.log(vaccinesCompleted);
 
   
 
@@ -302,8 +292,6 @@ function createLineGraph() {
     x: dates,
     y: vaccinesInitiated,
     type: 'scatter',
-    // fill: 'tozeroy'
-    fill: 'tonexty',
     name: 'Initiated'
       
   }
@@ -312,8 +300,6 @@ function createLineGraph() {
     x: dates,
     y: vaccinesCompleted,
     type: 'scatter',
-    // fill: 'tonexty'
-    fill: 'tozeroy',
     name: 'Completed'
   }
 
