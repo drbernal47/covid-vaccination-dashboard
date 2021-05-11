@@ -1,8 +1,6 @@
 console.log('stateData.js');
 
 
-// Function that retrieves all state vaccine data (from JSON – later change to flask route)
-var url = `https://api.covidactnow.org/v2/states.timeseries.json?apiKey=${json_api_key}`;
 
 d3.json('/vaccinations').then(response => {
   // console.log(response);
